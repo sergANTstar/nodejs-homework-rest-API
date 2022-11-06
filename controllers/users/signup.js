@@ -1,11 +1,14 @@
 const bcrypt = require('bcryptjs')
 const gravatar = require('gravatar')
+const { v4 } = require("uuid");
 
 const{User, schemas} = require("../../models/users")
-const createError = require('../../middleware/createError')
+const createError = require('../../helpers/createError')
+const sendEmail = require('../../helpers/sendEmail')
+
 
 const signup = async(req, res) => {
-    const {error} = schemas.register.validate(req.body)
+    const {error} = schemas.signup.validate(req.body)
 
     if(error) {
         throw createError(400, error.message)
@@ -20,10 +23,21 @@ const signup = async(req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 10)
     const avatarURL = gravatar.url(email)
+    const verificationToken = v4()
 
-    const reply = await User.create({...req.body, password: hashPassword, avatarURL});
-    res.status(201).json({
-        email: reply.email,
+    const reply = await User.create({ ...req.body, password: hashPassword, avatarURL, verificationToken })
+  
+    const sgMail = {
+    to: email,
+    from: 'sergantstar@gmail.com',
+    subject: 'Thank you for registration',
+    text: 'and easy to do anywhere, even with Node.js',
+    html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Click to confirm registration</a>`,
+  }
+
+  await sendEmail(sgMail)
+  res.status(201).json({
+    email: reply.email,
     })
 }
 

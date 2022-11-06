@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 
 const {User,  schemas } = require('../../models/users')
 
-const createError = require('../../middleware/createError')
+const createError = require('../../helpers/createError')
 const { SECRET_KEY } = process.env;
 
 const login = async (req, res) => {
@@ -17,8 +17,12 @@ const login = async (req, res) => {
     const user = await User.findOne({email})
 
     if (!user) {
-        throw createError(401, error.message)
-    }
+        throw createError(401, 'Email wrong')
+      }
+
+    if (!user.verify) {
+        throw createError(401, 'Email not verify')
+      }
 
     const comparePassword = await bcrypt.compare(password, user.password)
 

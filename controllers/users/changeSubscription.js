@@ -1,4 +1,4 @@
-const createError = require('../../middleware/createError')
+const createError = require('../../helpers/createError')
 const {User, schemas} = require('../../models/users')
 
 const changeSubscription = async(req, res) => {

@@ -1,6 +1,6 @@
 const { Contact } = require('../../models/contacts')
 
-const  createError  = require('../../middleware/createError')
+const  createError  = require('../../helpers/createError')
 
 const getContactById = async (req, res) => {
 

@@ -41,7 +41,7 @@ const userSchema = Schema(
   { versionKey: false, timestamps: true },
 )
 
-const registerSchema = Joi.object({
+const signupSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
 })
@@ -60,7 +60,7 @@ const updateSubscriptionSchema = Joi.object({
 })
 
 const schemas = {
-  register: registerSchema,
+  signup: signupSchema,
   login: loginSchema,
   email: emailSchema,
   subscription: updateSubscriptionSchema,

@@ -21,6 +21,8 @@ const signup = async(req, res) => {
         throw createError(409, `Email ${email} in use`)
     }
 
+    
+
     const hashPassword = await bcrypt.hash(password, 10)
     const avatarURL = gravatar.url(email)
     const verificationToken = v4()
@@ -29,9 +31,7 @@ const signup = async(req, res) => {
   
     const sgMail = {
     to: email,
-    from: 'sergantstar@gmail.com',
     subject: 'Thank you for registration',
-    text: 'and easy to do anywhere, even with Node.js',
     html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Click to confirm registration</a>`,
   }
 
